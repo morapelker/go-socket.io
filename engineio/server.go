@@ -21,7 +21,7 @@ type Server struct {
 	pingTimeout  time.Duration
 
 	transports *transport.Manager
-	sessions   *session.Manager
+	Sessions   *session.Manager
 
 	requestChecker CheckerFunc
 	connInitor     ConnInitorFunc
@@ -38,7 +38,7 @@ func NewServer(opts *Options) *Server {
 		pingTimeout:    opts.getPingTimeout(),
 		requestChecker: opts.getRequestChecker(),
 		connInitor:     opts.getConnInitor(),
-		sessions:       session.NewManager(opts.getSessionIDGenerator()),
+		Sessions:       session.NewManager(opts.getSessionIDGenerator()),
 		connChan:       make(chan Conn, 1),
 	}
 }
@@ -68,7 +68,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
 	sid := query.Get("sid")
 
-	reqSession := s.sessions.Get(sid)
+	reqSession := s.Sessions.Get(sid)
 
 	reqTransport := query.Get("transport")
 
@@ -134,7 +134,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 // Count counts connected
 func (s *Server) Count() int {
-	return s.sessions.Count()
+	return s.Sessions.Count()
 }
 
 func (s *Server) newSession(ctx context.Context, conn transport.Conn, reqTransport string) (*session.Session, error) {
@@ -144,11 +144,11 @@ func (s *Server) newSession(ctx context.Context, conn transport.Conn, reqTranspo
 		Upgrades:     s.transports.UpgradeFrom(reqTransport),
 	}
 
-	newSession, err := session.New(conn, s.sessions.NewID(), reqTransport, params)
+	newSession, err := session.New(conn, s.Sessions.NewID(), reqTransport, params)
 	if err != nil {
 		return nil, err
 	}
-	s.sessions.Add(newSession)
+	s.Sessions.Add(newSession)
 
 	go func() {
 		if err := newSession.InitSession(); err != nil {
