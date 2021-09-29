@@ -49,6 +49,7 @@ func (m *Manager) Remove(sid string) {
 	delete(m.sessions, sid)
 }
 
+
 func (m *Manager) Count() int {
 	m.locker.Lock()
 	defer m.locker.Unlock()
