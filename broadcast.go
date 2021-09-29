@@ -103,7 +103,6 @@ func (bc *broadcast) SendAll(event string, args ...interface{}) {
 		}
 	}
 }
-
 // ForEach sends data returned by DataFunc, if room does not exits sends nothing
 func (bc *broadcast) ForEach(room string, f EachFunc) {
 	bc.lock.RLock()
