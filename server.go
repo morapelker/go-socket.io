@@ -10,7 +10,7 @@ import (
 
 // Server is a go-socket.io server.
 type Server struct {
-	engine *engineio.Server
+	Engine *engineio.Server
 
 	handlers *namespaceHandlers
 
@@ -21,7 +21,7 @@ type Server struct {
 func NewServer(opts *engineio.Options) *Server {
 	return &Server{
 		handlers: newNamespaceHandlers(),
-		engine:   engineio.NewServer(opts),
+		Engine:   engineio.NewServer(opts),
 	}
 }
 
@@ -41,12 +41,12 @@ func (s *Server) Adapter(opts *RedisAdapterOptions) (bool, error) {
 
 // Close closes server.
 func (s *Server) Close() error {
-	return s.engine.Close()
+	return s.Engine.Close()
 }
 
 // ServeHTTP dispatches the request to the handler whose pattern most closely matches the request URL.
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	s.engine.ServeHTTP(w, r)
+	s.Engine.ServeHTTP(w, r)
 }
 
 // OnConnect set a handler function f to handle open event for namespace.
@@ -92,7 +92,7 @@ func (s *Server) OnEvent(namespace, event string, f interface{}) {
 // Serve serves go-socket.io server.
 func (s *Server) Serve() error {
 	for {
-		conn, err := s.engine.Accept()
+		conn, err := s.Engine.Accept()
 		//todo maybe need check EOF from Accept()
 		if err != nil {
 			return err
@@ -190,7 +190,7 @@ func (s *Server) Rooms(namespace string) []string {
 
 // Count number of connections.
 func (s *Server) Count() int {
-	return s.engine.Count()
+	return s.Engine.Count()
 }
 
 // ForEach sends data by DataFunc, if room does not exits sends nothing.
