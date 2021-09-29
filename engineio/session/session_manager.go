@@ -25,7 +25,6 @@ func NewManager(gen IDGenerator) *Manager {
 func (m *Manager) Add(s *Session) {
 	m.locker.Lock()
 	defer m.locker.Unlock()
-	fmt.Println("start add", s.ID())
 	m.sessions[s.ID()] = s
 }
 
@@ -37,7 +36,7 @@ func (m *Manager) Get(sid string) *Session {
 }
 
 func (m *Manager) Remove(sid string) {
-	fmt.Println("start remove", sid)
+	fmt.Println("remove", sid)
 	m.locker.Lock()
 	defer m.locker.Unlock()
 
@@ -48,7 +47,6 @@ func (m *Manager) Remove(sid string) {
 	fmt.Println(m.sessions)
 	delete(m.sessions, sid)
 }
-
 
 func (m *Manager) Count() int {
 	m.locker.Lock()
