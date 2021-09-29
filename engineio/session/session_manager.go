@@ -1,6 +1,7 @@
 package session
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -22,6 +23,7 @@ func NewManager(gen IDGenerator) *Manager {
 }
 
 func (m *Manager) Add(s *Session) {
+	fmt.Println("Adding", s.ID())
 	m.locker.Lock()
 	defer m.locker.Unlock()
 
@@ -36,6 +38,7 @@ func (m *Manager) Get(sid string) *Session {
 }
 
 func (m *Manager) Remove(sid string) {
+	fmt.Println("REMOVING", sid)
 	m.locker.Lock()
 	defer m.locker.Unlock()
 
