@@ -17,6 +17,7 @@ type Server struct {
 	redisAdapter *RedisAdapterOptions
 }
 
+
 // NewServer returns a server.
 func NewServer(opts *engineio.Options) *Server {
 	return &Server{
