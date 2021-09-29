@@ -151,7 +151,7 @@ func (s *Server) ClearRoom(namespace string, room string) bool {
 func (s *Server) BroadcastToRoom(namespace string, room, event string, args ...interface{}) bool {
 	nspHandler := s.getNamespace(namespace)
 	if nspHandler != nil {
-		nspHandler.broadcast.Send(room, event, args...)
+		go nspHandler.broadcast.Send(room, event, args...)
 		return true
 	}
 
@@ -162,7 +162,7 @@ func (s *Server) BroadcastToRoom(namespace string, room, event string, args ...i
 func (s *Server) BroadcastToNamespace(namespace string, event string, args ...interface{}) bool {
 	nspHandler := s.getNamespace(namespace)
 	if nspHandler != nil {
-		nspHandler.broadcast.SendAll(event, args...)
+		go nspHandler.broadcast.SendAll(event, args...)
 		return true
 	}
 

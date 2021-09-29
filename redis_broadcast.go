@@ -321,9 +321,9 @@ func (bc *redisBroadcast) onMessage(channel string, msg []byte) error {
 	}
 
 	if room != "" {
-		bc.send(room, event, args...)
+		go bc.send(room, event, args...)
 	} else {
-		bc.sendAll(event, args...)
+		go bc.sendAll(event, args...)
 	}
 
 	return nil
